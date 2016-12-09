@@ -17,6 +17,9 @@ set mypassword ""
 set passphrase ""
 
 
+#uncomment this for standalone testing
+#spawn dbclient admin@$ilom
+
 # initial password list
 set passlist [list passphrase1 passphrase2 passphrase3 passphrase4]
 

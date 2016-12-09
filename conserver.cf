@@ -1,0 +1,71 @@
+# The character '&' in logfile names are substituted with the console
+# name.
+#
+config * {
+}
+default full {
+	rw *;
+}
+default * {
+	logfile /var/log/conserver/&.log;
+	timestamp "";
+	include full;
+	logfilemax 0;
+        master localhost;
+	options autoreinit,!ondemand;
+	options reinitoncc;
+}
+
+
+#domyslne parametry polaczenia iLO
+
+default ilo-connection {
+    type exec;
+    execsubst X=hs;
+    initsubst X=hs;
+    exec dbclient admin@X;
+    initcmd /etc/conserver/dropbear.sh X;
+}
+
+default supermicro-connection {
+    type exec;
+    execsubst X=hs;
+    exec ipmitool -H X -U admin -P sekrit -I lanplus sol activate ;
+#    initcmd /etc/conserver/supermicro.sh ;
+}
+
+default ilo-connection-administrator {
+    type exec;
+    execsubst X=hs;
+    initsubst X=hs;
+    exec dbclient Administrator@X;
+    initcmd /etc/conserver/dropbear-ilo.sh ;
+}
+
+### set up some custom break sequences
+#break 4 { string "+\d+\d+"; delay 300; }
+break 6 { string "\033\002s"; }
+
+
+# Break sequences
+# #
+#BREAK1=\z
+#BREAK2=\zs\zu\zb
+#BREAK3=\zt
+#BREAK4=\zm
+
+console supermicro-092 {
+  host 192.168.1.2;
+  include supermicro-connection;
+}
+
+console ilo-box-1 {
+  host 192.168.1.1;
+  include ilo-connection;
+}
+
+access * {
+	trusted 127.0.0.1;
+	allowed 127.0.0.1;
+	admin konsola;
+}

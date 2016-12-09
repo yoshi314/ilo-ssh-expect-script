@@ -14,3 +14,7 @@ A sample conserver config file is attached.
 
 
 Dropbear ssh client is used due to better compatibility with older iLO instances. Feel free to adapt to another ssh client.
+
+
+# Caveats
+Do not uncomment the 'puts' lines unless you are running script standalone. It will mess with the conserver session badly.
